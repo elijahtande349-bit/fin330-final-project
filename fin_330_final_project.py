@@ -55,10 +55,11 @@ plt.show()
 # iloc[-1] = the last row (today's price)
 # iloc[-20:].mean() = average of the last 20 rows
 
-current_price = close.iloc[-1]
-ma_20 = close.iloc[-20:].mean()
-ma_50 = close.iloc[-50:].mean()
-
+if not close.empty:
+    current_price = close.iloc[-1]
+    st.write(f"The current price is {current_price}")
+else:
+    st.error("No data found for this ticker. Please check the symbol and try again.")
 print(f"Current Price: ${current_price:.2f}")
 print(f"20-Day MA:     ${ma_20:.2f}")
 print(f"50-Day MA:     ${ma_50:.2f}")
