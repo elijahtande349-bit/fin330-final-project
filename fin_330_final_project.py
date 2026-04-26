@@ -19,6 +19,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import yfinance as yf
+import streamlit as st
 
 """# PART 1: Individual Stock Analysis"""
 
@@ -61,9 +62,12 @@ if not close.empty:
 else:
     st.error("No data found for this ticker. Please check the symbol and try again.")
 print(f"Current Price: ${current_price:.2f}")
-print(f"20-Day MA:     ${ma_20:.2f}")
-print(f"50-Day MA:     ${ma_50:.2f}")
+# Use the data you calculated earlier
+ma_20 = data["MA20"].iloc[-1]
+ma_50 = data["MA50"].iloc[-1]
 
+st.write(f"20-Day MA: ${ma_20:.2f}")
+st.write(f"50-Day MA: ${ma_50:.2f}")
 # Determine trend direction
 # If price is above both MAs, the stock is in an uptrend
 # If below both, it's in a downtrend
