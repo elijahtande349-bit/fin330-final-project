@@ -29,6 +29,7 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap');
 html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
+
 .tip-box {
     background: #eff6ff;
     border-left: 4px solid #2563eb;
@@ -60,12 +61,29 @@ html, body, [class*="css"] { font-family: 'DM Sans', sans-serif; }
     border-left-color: #ca8a04;
     color: #713f12;
 }
+
+/* ---- METRIC CARD FIX (forces readable dark text on light card) ---- */
 [data-testid="stMetric"] {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 1rem 1.25rem;
 }
+[data-testid="stMetric"] * {
+    color: #0f172a !important;
+}
+[data-testid="stMetricLabel"] {
+    color: #475569 !important;
+    font-weight: 500 !important;
+}
+[data-testid="stMetricValue"] {
+    color: #0f172a !important;
+    font-weight: 700 !important;
+}
+[data-testid="stMetricDelta"] {
+    color: #16a34a !important;
+}
+
 .section-intro {
     font-size: 16px;
     color: #475569;
@@ -132,7 +150,7 @@ with tab1:
     if data.empty:
         st.error(f"No data found for '{ticker}'. Please check the ticker.")
     else:
-        # Flatten MultiIndex columns if present (yfinance returns them by default now)
+        # Flatten MultiIndex columns if present
         data = flatten_columns(data)
 
         st.success(f"Data successfully loaded for {ticker}")
@@ -310,13 +328,11 @@ with tab2:
     else:
         # Extract Close prices safely whether columns are MultiIndex or flat
         if isinstance(raw.columns, pd.MultiIndex):
-            # Multi-ticker download: top level is price field
             if "Close" in raw.columns.get_level_values(0):
                 prices = raw["Close"].copy()
             else:
                 prices = pd.DataFrame()
         else:
-            # Single-ticker fallback
             prices = raw[["Close"]].copy()
             prices.columns = [all_tickers[0]]
 
